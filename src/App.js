@@ -12,11 +12,11 @@ function App() {
   function reducer(state, action) {
     switch (action.type) {
       case 'digit':
-        if (!state.operation) {
-          return { ...state, previous: state.previous + action.payload }
-        }
         if (state.current && !state.previous) {
           return {...state, previous: action.payload, current: ''}
+        }
+        if (!state.operation) {
+          return { ...state, previous: state.previous + action.payload }
         }
         return { ...state, current: state.current + action.payload }
 
@@ -30,7 +30,7 @@ function App() {
         return { previous: '0', operation: action.payload, current: '' }
 
       case 'evaluate':
-        return { previous: '', operation: '', current: eval(`${state.previous} ${state.operation} ${state.current}`) }
+        return { previous: '', operation: '', current: Math.round(eval(`${state.previous} ${state.operation} ${state.current}`) * 100) / 100 }
 
       case 'DEL':
         if (state.current) {
@@ -56,7 +56,7 @@ function App() {
       </div>
       <button className='span-two' onClick={() => dispatch({ type: 'AC' })}>AC</button>
       <button onClick={() => dispatch({ type: 'DEL' })}>DEL</button>
-      <button onClick={() => dispatch({ type: 'operation', payload: '÷' })}>÷</button>
+      <button onClick={() => dispatch({ type: 'operation', payload: '/' })}>÷</button>
       <button onClick={() => dispatch({ type: 'digit', payload: '1' })}>1</button>
       <button onClick={() => dispatch({ type: 'digit', payload: '2' })}>2</button>
       <button onClick={() => dispatch({ type: 'digit', payload: '3' })}>3</button>
